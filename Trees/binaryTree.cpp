@@ -91,20 +91,82 @@ public:
         return temp;
     }
     void display(){
-        queue<Node*> q;
-        q.push(root);
-        while (!q.empty()) {
-            Node* current = q.front();
-            q.pop();
-            cout << current->data << " ";
-            if (current->left != NULL) {
-                q.push(current->left);
+        if(root){
+            queue<Node*> q;
+            q.push(root);
+            while (!q.empty()) {
+                Node* current = q.front();
+                q.pop();
+                cout << current->data << " ";
+                if (current->left != NULL) {
+                    q.push(current->left);
+                }
+                if (current->right != NULL) {
+                    q.push(current->right);
+                }
             }
-            if (current->right != NULL) {
-                q.push(current->right);
-            }
-        }
         cout << endl;
+        }
+    }
+    int deleteNode(int e){
+        if(!root)return 1;
+        Node* temp = root, *par = NULL;
+        while(temp && temp->data!=e){
+            par = temp;
+            if(e<temp->data)
+                temp = temp->left;
+            else
+                temp = temp->right;
+        }
+        if(!temp)
+            return 1;
+        if (temp == root) {
+        root = deleteByCopy(root, temp);
+    } else {
+        deleteByCopy(par, temp);
+    }
+    }
+    Node* deleteByCopy(Node* par, Node* temp){
+        
+        if(!temp->left && !temp->right){
+            if(par){
+                if(temp->data<par->data)
+                par->left= NULL;
+                else
+                    par->right = NULL;
+            }
+            delete temp;
+        }else if(!temp->left){
+            if (par) {
+                if (temp->data < par->data)
+                    par->left = temp->right;
+                else
+                    par->right = temp->right;
+            }else{
+                root = temp->right; 
+            }
+            delete temp;
+        }else if(!temp->right){
+             if (par) {
+            if (temp->data < par->data)
+                par->left = temp->left;
+            else
+                par->right = temp->left;
+            } else {
+                root = temp->left;
+            }
+            delete temp;
+        }else{
+            Node* succ = temp->right;
+            Node* succPar = temp;
+            while (succ->left) {
+                succPar = succ;
+                succ = succ->left;
+            }
+            temp->data = succ->data;
+            deleteByCopy(succPar, succ);
+        }
+        return root;
     }
 };
 
