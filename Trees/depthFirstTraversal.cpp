@@ -22,22 +22,55 @@ public:
         root = NULL;
         count = 0;
     }
-    void preorder(Node* root){
-       if(root){
-        cout << root->data;
-        preorder(root->left);
-        preorder(root->right);
+    void insert(int e){
+        Node *n = new Node(e);
+        if(!root){
+            root = n;
+            count++;
+            return;
+        }
+        Node *temp = root;
+        while (true){
+           if(temp->data<e){
+            if(!temp->right){
+                temp->right=n;
+                break;
+            }
+            else{
+                temp=temp->right;
+            }
+           }else{
+            if(!temp->left){
+                temp->left=n;
+                break;
+            }else{
+                temp=temp->left;
+            }
+           }
+        }
+        count++;
+        return;  
+    }
+    void preorder(Node* n){
+       if(n){
+            cout << n->data;
+            preorder(n->left);
+            preorder(n->right);
        } 
     }
-    void postorder(Node* root){
-        postorder(root->left);
-        postorder(root->right);
-        cout << root->data;
+    void postorder(Node* n){
+        if(n){
+            postorder(n->left);
+            postorder(n->right);
+            cout << n->data;
+        }
     }
-    Node* inorder(Node* root){
-        inorder(root->left);
-        cout << root->data;
-        inorder(root->right);
+    void inorder(Node* n){
+        if(n){
+            inorder(n->left);
+            cout << n->data;
+            inorder(n->right);
+        }
     }
 };
 
@@ -47,23 +80,29 @@ int main(){
 
     while (choice != 0){
         cout << "\nMenu:\n";
-        cout << "1. PreOrder 1\n";
-        cout << "2. PostOrder 2\n";
-        cout << "3. InOrder \n";
+        cout << "1. Insert\n";
+        cout << "2. PreOrder\n";
+        cout << "3. PostOrder\n";
+        cout << "4. InOrder \n";
         cout << "0. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
             case 1:
+                cout << "Enter the value to be inserted: ";
+                cin >> value;
+                t.insert(value);
+                break;
+            case 2:
                 cout << "Pre Order: ";
                 t.preorder(t.root);
                 break;
-            case 2:
+            case 3:
                 cout << "Post Order: ";
                 t.postorder(t.root);
                 break;
-            case 3:
+            case 4:
                 cout << "In Order: ";
                 t.inorder(t.root);
                 break;
